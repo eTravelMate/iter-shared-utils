@@ -16,3 +16,9 @@ console.error = function (...args) {
     const message = args.map((arg) => typeof arg === "object" ? JSON.stringify(arg) : String(arg)).join(" ");
     logger.error(message);
 };
+// Override console.warn
+console.warn = function (...args) {
+    // Convert all arguments into a single string
+    const message = args.map((arg) => typeof arg === "object" ? JSON.stringify(arg) : String(arg)).join(" ");
+    logger.warn(message);
+};
