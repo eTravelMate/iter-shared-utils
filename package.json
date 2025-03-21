@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -14,6 +16,8 @@
   "description": "",
   "dependencies": {
     "@aws-sdk/client-ses": "^3.741.0",
+    "axios": "^1.6.7",
+    "express": "^4.21.2",
     "ioredis": "^5.4.2",
     "kafkajs": "^2.2.4",
     "mongoose": "^8.10.0",
@@ -21,9 +25,12 @@
     "pino": "^9.6.0",
     "pino-pretty": "^13.0.0",
     "rotating-file-stream": "^3.2.6",
-    "sequelize": "^6.37.5"
+    "sequelize": "^6.37.5",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
+    "@types/express": "^5.0.1",
+    "@types/uuid": "^9.0.6",
     "typescript": "^5.7.3"
   }
 }

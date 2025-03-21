@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getlogger = void 0;
 const pino_1 = __importDefault(require("pino"));
 const rotating_file_stream_1 = require("rotating-file-stream");
+const requestContext_1 = require("./requestContext");
 let logger;
 const getlogger = (fileLogger_level = "info", consoleLogger_level = "info") => {
     let PinoLogLevel;
@@ -51,24 +52,41 @@ const getlogger = (fileLogger_level = "info", consoleLogger_level = "info") => {
                 ignore: "pid,hostname",
             },
         },
+        formatters: {
+            level: (label) => ({ level: label.toUpperCase() }),
+        },
     });
-    // Unified logger interface
+    const buildPrefix = (logLevel) => {
+        let requestId = requestContext_1.requestContext.getRequestId();
+        let serviceEndpoint = requestContext_1.requestContext.getServiceEndpoint();
+        requestId = requestId ? requestId.replace(/-/g, "") : "NOREQID";
+        serviceEndpoint = serviceEndpoint ? serviceEndpoint.replace(/\s+/g, "") : "NOENDPOINT";
+        return `${requestId}_${serviceEndpoint}`;
+    };
     logger = {
         info: (...msg) => {
-            fileLogger.info(...msg);
-            consoleLogger.info(...msg);
+            const prefix = buildPrefix("INFO");
+            const message = msg.join(" ");
+            fileLogger.info(`${prefix}: ${message}`);
+            consoleLogger.info(`${prefix}: ${message}`);
         },
         error: (...msg) => {
-            fileLogger.error(...msg);
-            consoleLogger.error(...msg);
+            const prefix = buildPrefix("ERROR");
+            const message = msg.join(" ");
+            fileLogger.error(`${prefix}: ${message}`);
+            consoleLogger.error(`${prefix}: ${message}`);
         },
         warn: (...msg) => {
-            fileLogger.warn(...msg);
-            consoleLogger.warn(...msg);
+            const prefix = buildPrefix("WARN");
+            const message = msg.join(" ");
+            fileLogger.warn(`${prefix}: ${message}`);
+            consoleLogger.warn(`${prefix}: ${message}`);
         },
         debug: (...msg) => {
-            fileLogger.debug(...msg);
-            consoleLogger.debug(...msg);
+            const prefix = buildPrefix("DEBUG");
+            const message = msg.join(" ");
+            fileLogger.debug(`${prefix}: ${message}`);
+            consoleLogger.debug(`${prefix}: ${message}`);
         },
     };
     return logger;
